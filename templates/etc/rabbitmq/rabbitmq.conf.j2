@@ -1,0 +1,25 @@
+cluster_formation.peer_discovery_backend = rabbit_peer_discovery_aws
+cluster_formation.aws.region = us-east-1
+cluster_formation.aws.instance_tags.ClusterName = @clustername@
+cluster_formation.aws.instance_tags.Environment = @environment@
+cluster_formation.node_cleanup.only_log_warning = false
+
+cluster_partition_handling = pause_minority
+queue_master_locator = min-masters
+
+tcp_listen_options.keepalive = true
+tcp_listen_options.backlog = 4096
+tcp_listen_options.nodelay = true
+
+channel_max = 2048
+
+vm_memory_high_watermark.relative = 0.65
+
+disk_free_limit.relative = 2.0
+
+management.rates_mode = basic
+management.http_log_dir = /var/log/rabbitmq/http
+management.login_session_timeout = 15
+management.load_definitions = /etc/rabbitmq/user.json
+
+hipe_compile = true

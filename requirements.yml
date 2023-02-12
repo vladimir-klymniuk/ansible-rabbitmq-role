@@ -1,0 +1,14 @@
+---
+- src: oefenweb.sysctl
+  version: v1.0.26
+
+# switch when merged
+# - src: "git+https://github.com/sitewards/ansible-role-fluentbit.git"
+#   version: "7ac027f638025d9732e84efa3cbaac6335826521"
+#   name: "sitewards.fluentbit"
+- src: https://github.com/vladimir-klymniuk/ansible-role-fluentbit
+  version: "9abcd8d34d77f1a8a77f61dd9e3d692dd90e2a38"
+  name: "sitewards.fluentbit"
+
+- src: cloudalchemy.node-exporter
+  version: 0.11.3

@@ -1,0 +1,72 @@
+---
+rabbitmq_user: rabbitmq
+
+rabbitmq_deps:
+  - apt-transport-https
+  - ca-certificates
+  - adduser
+  - init-system-helpers
+  - logrotate
+  - socat
+  - wget
+  - xfsprogs
+
+erlang_packages:
+  - erlang-base-hipe
+  - erlang-asn1
+  - erlang-crypto
+  - erlang-runtime-tools
+  - erlang-inets
+  - erlang-mnesia
+  - erlang-diameter
+  - erlang-edoc
+  - erlang-eldap
+  - erlang-erl-docgen
+  - erlang-eunit
+  - erlang-odbc
+  - erlang-parsetools
+  - erlang-ssh
+  - erlang-syntax-tools
+  - erlang-tools
+  - erlang-diameter
+  - erlang-nox
+  - erlang-snmp
+  - erlang-os-mon
+  - erlang-public-key
+  - erlang-ssl
+  - erlang-xmerl
+
+rabbitmq_package_url: "https://github.com/rabbitmq/rabbitmq-server/releases/download/v{{ rabbitmq_version }}/rabbitmq-server_{{ rabbitmq_version }}-1_all.deb"
+rabbitmq_hipe_directory: "/var/lib/hipe"
+
+rabbitmq_custom_plugins:
+  - "https://github.com/deadtrickster/prometheus_rabbitmq_exporter/releases/download/v3.7.2.4/accept-0.3.3.ez"
+  - "https://github.com/deadtrickster/prometheus_rabbitmq_exporter/releases/download/v3.7.2.4/prometheus-3.5.1.ez"
+  - "https://github.com/deadtrickster/prometheus_rabbitmq_exporter/releases/download/v3.7.2.4/prometheus_cowboy-0.1.4.ez"
+  - "https://github.com/deadtrickster/prometheus_rabbitmq_exporter/releases/download/v3.7.2.4/prometheus_httpd-2.1.8.ez"
+  - "https://github.com/deadtrickster/prometheus_rabbitmq_exporter/releases/download/v3.7.2.4/prometheus_process_collector-1.3.1.ez"
+  - "https://github.com/deadtrickster/prometheus_rabbitmq_exporter/releases/download/v3.7.2.4/prometheus_rabbitmq_exporter-3.7.2.4.ez"
+
+rabbitmq_enabled_plugins:
+  - 'rabbitmq_consistent_hash_exchange'
+  - 'rabbitmq_federation_management'
+  - 'rabbitmq_federation'
+  - 'rabbitmq_management'
+  - 'rabbitmq_peer_discovery_aws'
+  - 'rabbitmq_sharding'
+  - 'rabbitmq_shovel'
+  - 'rabbitmq_shovel_management'
+  - 'rabbitmq_top'
+  - 'rabbitmq_trust_store'
+  - 'prometheus_rabbitmq_exporter'
+  - 'prometheus_process_collector'
+
+rabbitmq_env:
+  ERL_CRASH_DUMP_SECONDS: 1
+  SERVER_ADDITIONAL_ERL_ARGS: "+A {{ ansible_processor_vcpus * 12 }} +hmqd off_heap +MMmcs 30"
+  RABBITMQ_SERVER_CODE_PATH: "{{ rabbitmq_hipe_directory }}"
+
+goss_user: goss
+goss_version: "v0.3.6"
+goss_port: 8181
+goss_endpoint: "/healthz"

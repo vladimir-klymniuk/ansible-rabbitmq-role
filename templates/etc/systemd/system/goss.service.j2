@@ -1,0 +1,15 @@
+[Unit]
+Description={{ goss_user }}
+
+[Service]
+User={{ goss_user }}
+Group={{ goss_user }}
+WorkingDirectory=/home/{{ goss_user }}
+TimeoutStartSec=10
+ExecStart=/usr/local/bin/goss -g /etc/rabbitmq/goss.yaml serve -f silent -l 0.0.0.0:{{ goss_port }} -e {{ goss_endpoint }}
+RestartSec=5
+Restart=always
+StandardOutput=null
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,79 @@
+---
+- name: RMQ | Add testing repo for cloud-init
+  apt_repository:
+    repo: deb http://http.us.debian.org/debian/ testing non-free contrib main
+    state: present
+
+- name: RMQ | Intsall deps
+  apt:
+    name: "{{ rabbitmq_deps }}"
+    update_cache: yes
+    default_release: stretch
+    install_recommends: no
+
+- name: RMQ | Install new cloud-init
+  apt:
+    name: cloud-init
+    update_cache: yes
+    default_release: testing
+    install_recommends: no
+
+- name: RMQ | Add repo key
+  apt_key:
+    url: https://dl.bintray.com/rabbitmq/Keys/rabbitmq-release-signing-key.asc
+    state: present
+
+- name: RMQ | Add erlang repo
+  apt_repository:
+    repo: deb http://dl.bintray.com/rabbitmq/debian stretch erlang-21.x
+    state: present
+
+- name: RMQ | Install erlang packages
+  apt:
+    name: "{{ item }}=1:{{ erlang_version }}-1"
+    state: present
+    install_recommends: no
+    update_cache: yes
+  with_items: "{{ erlang_packages }}"
+
+- name: RQM | Check if rabbitmq is installed
+  command: dpkg-query -W rabbitmq-server
+  register: rabbitmq_check_deb
+  failed_when: rabbitmq_check_deb.rc > 1
+  changed_when: rabbitmq_check_deb.rc == 1
+
+- name: RMQ | Download rabbitmq package
+  get_url:
+    url: "{{ rabbitmq_package_url }}"
+    dest: /tmp/rabbitmq.deb
+  when: rabbitmq_check_deb.rc == 1
+
+- name: RMQ | Intsall rabbitmq
+  apt:
+    deb: /tmp/rabbitmq.deb
+  when: rabbitmq_check_deb.rc == 1
+
+- name: RMQ | Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ rabbitmq_user }}"
+    group: "{{ rabbitmq_user }}"
+  with_items:
+    - /var/lib/hipe
+    - /var/lib/rabbitmq
+    - /etc/rabbitmq
+    - "{{ rabbitmq_hipe_directory }}"
+    - /usr/lib/rabbitmq/plugins
+
+- name: RMQ | Hipe compile
+  command: rabbitmqctl hipe_compile "{{ rabbitmq_hipe_directory }}"
+  args:
+    creates: "{{ rabbitmq_hipe_directory }}/*.beam"
+  when: rabbitmq_hipe_compile
+
+- name: RMQ | Download plugins
+  get_url:
+    url: "{{ item }}"
+    dest: /usr/lib/rabbitmq/plugins/
+  with_items: "{{ rabbitmq_custom_plugins }}"

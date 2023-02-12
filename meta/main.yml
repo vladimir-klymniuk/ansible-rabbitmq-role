@@ -1,0 +1,76 @@
+---
+galaxy_info:
+  author: DevOps 21
+  description: Configuration rabbitmq server
+  company: ManageTeam
+
+  license: license
+
+  min_ansible_version: 2.0
+
+  platforms:
+  - name: Debian
+    versions:
+    - all
+
+  galaxy_tags: []
+
+dependencies:
+  - role: oefenweb.sysctl
+    sysctl_settings:
+      - name: vm.swappiness
+        value: 0
+      - name: vm.max_map_count
+        value: 262144
+      - name: fs.inotify.max_user_instances
+        value: 2048
+      - name: net.ipv4.tcp_syn_retries
+        value: 3
+      - name: net.ipv4.tcp_synack_retries
+        value: 3
+      - name: net.ipv4.tcp_max_syn_backlog
+        value: 8096
+      - name: net.core.somaxconn
+        value: 4096
+      - name: net.core.netdev_max_backlog
+        value: 4096
+      - name: net.ipv4.ip_local_port_range
+        value: "10240 65000"
+      - name: net.ipv4.tcp_tw_recycle
+        value: 0
+      - name: net.ipv4.tcp_tw_reuse
+        value: 1
+      - name: net.ipv4.tcp_slow_start_after_idle
+        value: 0
+      - name: net.ipv4.tcp_syncookies
+        value: 0
+      - name: net.ipv4.tcp_fin_timeout
+        value: 15
+      - name: net.ipv4.tcp_timestamps
+        value: 1
+      - name: net.ipv4.ip_nonlocal_bind
+        value: 1
+      - name: net.ipv4.tcp_retries1
+        value: 3
+      - name: net.ipv4.tcp_retries2
+        value: 8
+      - name: net.ipv4.tcp_max_orphans
+        value: 65536
+      - name: net.ipv4.tcp_low_latency
+        value: 1
+      - name: net.ipv4.tcp_window_scaling
+        value: 1
+      - name: net.ipv4.tcp_congestion_control
+        value: cubic
+      - name: fs.file-max
+        value: 2097152
+      - name: net.ipv4.tcp_keepalive_time
+        value: 30
+      - name: net.ipv4.tcp_keepalive_intvl
+        value: 3
+      - name: net.ipv4.tcp_keepalive_probes
+        value: 3
+  - role: cloudalchemy.node-exporter
+    node_exporter_version: 0.15.2
+    node_exporter_enabled_collectors:
+      - systemd

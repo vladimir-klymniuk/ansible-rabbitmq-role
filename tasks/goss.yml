@@ -1,0 +1,29 @@
+---
+- name: RMQ | Download goss
+  get_url:
+    url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version }}/goss-linux-amd64"
+    dest: /usr/local/bin/goss
+    mode: 0655
+
+- name: RMQ | Render goss config
+  copy:
+    src: etc/rabbitmq/goss.yaml
+    dest: /etc/rabbitmq/goss.yaml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: RMQ | Render goss unit
+  template:
+    src: etc/systemd/system/goss.service.j2
+    dest: /etc/systemd/system/goss.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: RMQ | Start goss service
+  systemd:
+    state: started
+    enabled: yes
+    daemon_reload: yes
+    name: goss

@@ -1,0 +1,4 @@
+---
+erlang_version: 21.1
+rabbitmq_version: 3.7.9
+rabbitmq_hipe_compile: true

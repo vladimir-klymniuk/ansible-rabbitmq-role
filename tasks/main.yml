@@ -1,0 +1,6 @@
+---
+- include: fluentbit.yml
+- include: user.yml
+- include: install.yml
+- include: config.yml
+- include: goss.yml

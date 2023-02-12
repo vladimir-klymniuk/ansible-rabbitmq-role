@@ -1,0 +1,23 @@
+- name: RMQ | Enable offline plugins
+  template:
+    src: etc/rabbitmq/enabled_plugins.j2
+    dest: /etc/rabbitmq/enabled_plugins
+    owner: root
+    group: root
+    mode: 0644
+
+- name: RMQ | Render rabbitmq-env.conf
+  template:
+    src: etc/rabbitmq/rabbitmq-env.conf.j2
+    dest: /etc/rabbitmq/rabbitmq-env.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: RMQ | Render rabbitmq.conf
+  template:
+    src: etc/rabbitmq/rabbitmq.conf.j2
+    dest: /etc/rabbitmq/rabbitmq.conf
+    owner: root
+    group: root
+    mode: 0644

@@ -1,0 +1,25 @@
+---
+- name: RMQ | Create group
+  group:
+    name: "{{ rabbitmq_user }}"
+    state: present
+
+- name: RMQ | Create user
+  user:
+    name: "{{ rabbitmq_user }}"
+    groups: "{{ rabbitmq_user }}"
+    append: True
+    state: 'present'
+
+- name: RMQ | Create group
+  group:
+    name: "{{ goss_user }}"
+    state: present
+
+- name: RMQ | Create user
+  user:
+    name: "{{ goss_user }}"
+    groups: "{{ goss_user }}"
+    append: True
+    state: 'present'
+    create_home: yes

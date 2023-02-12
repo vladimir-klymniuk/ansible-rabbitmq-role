@@ -1,0 +1,6 @@
+---
+http:
+  "http://127.0.0.1:15672/api/aliveness-test/statuscheckvhost":
+    status: 200
+    username: goss
+    password: goss
